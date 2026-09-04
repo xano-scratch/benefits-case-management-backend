@@ -1,0 +1,83 @@
+{
+  "version": 1,
+  "objects": {
+    "app:appeals": {
+      "guid": "591155deae3406b0ee151ba6bb0b2a49",
+      "canonical": "appeals",
+      "canonical_source": "code"
+    },
+    "app:auth": {
+      "guid": "4fe67f5a2d319eaaca7996700f27edd8",
+      "canonical": "auth",
+      "canonical_source": "code"
+    },
+    "app:cases": {
+      "guid": "6c603fda579a54b2feb9f70040350deb",
+      "canonical": "cases",
+      "canonical_source": "code"
+    },
+    "app:determinations": {
+      "guid": "52bb40cf3737c1622457b818d3613377",
+      "canonical": "determinations",
+      "canonical_source": "code"
+    },
+    "app:seed": {
+      "guid": "7110fabc369b25f0581044e47d499906",
+      "canonical": "seed",
+      "canonical_source": "code"
+    },
+    "app:verifications": {
+      "guid": "67d52aa4f4c5015855418a2b373a3dcf",
+      "canonical": "verifications",
+      "canonical_source": "code"
+    },
+    "dbo:applicants": {
+      "guid": "e7b39d8ffe49c097c98b851c73e72941"
+    },
+    "dbo:case_events": {
+      "guid": "5bff3805e835e4c793e9c1d848a39b2a"
+    },
+    "dbo:cases": {
+      "guid": "be0db39705d837fdc44f726f02db5eb2"
+    },
+    "dbo:determinations": {
+      "guid": "a262adecad782b64fdc5bd5a287395dd"
+    },
+    "dbo:users": {
+      "guid": "157d4a98d979cf04b9ccdb98dfc15229"
+    },
+    "dbo:verifications": {
+      "guid": "81c0a5c2c957b13f4cc9eca97b8bb28c"
+    },
+    "function:evaluate_eligibility": {
+      "guid": "b4c282f01f105bbc55c1a063aa18e1a0"
+    },
+    "query:appeals|POST|file": {
+      "guid": "4bace7551b5309174494796fc793083b"
+    },
+    "query:auth|POST|login": {
+      "guid": "d39d74f907baeb484e9c93358362998a"
+    },
+    "query:cases|GET|get/{case_id}": {
+      "guid": "1932e03889873f3f550383f5d4f70cf2"
+    },
+    "query:cases|GET|list": {
+      "guid": "12ab70afd6f6d7fe82dcf6741499fd31"
+    },
+    "query:cases|POST|advance": {
+      "guid": "fc0dbae613e1102475de0d2793804e86"
+    },
+    "query:cases|POST|intake": {
+      "guid": "1383dc71346fc9aa5b20869eb9b89188"
+    },
+    "query:determinations|POST|decide": {
+      "guid": "514a7cbe82febe955ac08486861c8a80"
+    },
+    "query:seed|GET|seed": {
+      "guid": "cfd6948ce2dfd6ea2f93880aac0bdc1c"
+    },
+    "query:verifications|POST|record": {
+      "guid": "9b4aeb4903e888a658dbd08daee71cf2"
+    }
+  }
+}

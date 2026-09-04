@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Benefits Case Management Backend — a Xano proof artifact</title>
+    <meta
+      name="description"
+      content="A governed government benefits backend on Xano: a role-gated case state machine, one versioned eligibility rule, and an append-only audit trail in one API layer."
+    />
+    <style>
+      :root {
+        --bg: #0b0d10;
+        --panel: #14171c;
+        --panel-2: #191d23;
+        --border: #262b33;
+        --text: #e8eaed;
+        --muted: #9aa4b2;
+        --primary: #e8eaed;
+        --accent: #6ea8fe;
+        --green: #34d399;
+        --amber: #fbbf24;
+        --red: #f87171;
+        --radius: 12px;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+      a { color: inherit; }
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        background: var(--panel-2);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 1px 6px;
+        font-size: 0.9em;
+      }
+      .wrap { max-width: 980px; margin: 0 auto; padding: 0 24px; }
+      header.top {
+        border-bottom: 1px solid var(--border);
+        background: linear-gradient(180deg, rgba(110,168,254,0.06), transparent);
+      }
+      .brand { display: flex; align-items: center; gap: 12px; padding: 22px 0; }
+      .brand .mark {
+        width: 40px; height: 40px; border-radius: 10px;
+        background: var(--primary); color: var(--bg);
+        display: flex; align-items: center; justify-content: center; font-weight: 700;
+      }
+      .brand .name { font-weight: 600; letter-spacing: -0.01em; }
+      .badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 0; }
+      .badge {
+        display: inline-block; font-size: 12px; font-weight: 600;
+        border: 1px solid var(--border); border-radius: 999px;
+        padding: 3px 10px; color: var(--muted); background: var(--panel);
+      }
+      .badge.play { color: var(--accent); border-color: rgba(110,168,254,0.4); }
+      section { padding: 40px 0; border-bottom: 1px solid var(--border); }
+      h1 { font-size: 40px; line-height: 1.1; letter-spacing: -0.02em; margin: 18px 0 10px; }
+      h2 { font-size: 22px; letter-spacing: -0.01em; margin: 0 0 16px; }
+      .tagline { font-size: 18px; color: var(--muted); max-width: 720px; margin: 0 0 18px; }
+      .meta { color: var(--muted); font-size: 14px; margin: 0 0 22px; }
+      .meta strong { color: var(--text); font-weight: 600; }
+      .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 6px 0 0; }
+      .btn {
+        display: inline-flex; align-items: center; gap: 8px;
+        font-weight: 600; font-size: 15px; text-decoration: none;
+        padding: 11px 20px; border-radius: 10px; border: 1px solid transparent;
+        transition: transform 0.05s ease, opacity 0.15s ease;
+      }
+      .btn:active { transform: translateY(1px); }
+      .btn.primary { background: var(--primary); color: var(--bg); }
+      .btn.primary:hover { opacity: 0.9; }
+      .btn.ghost { background: transparent; color: var(--text); border-color: var(--border); }
+      .btn.ghost:hover { border-color: var(--muted); }
+      .shot {
+        margin-top: 28px; border: 1px solid var(--border); border-radius: var(--radius);
+        overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+      }
+      .shot img { display: block; width: 100%; height: auto; }
+      .grid { display: grid; gap: 16px; grid-template-columns: 1fr 1fr; }
+      @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } h1 { font-size: 32px; } }
+      .card {
+        background: var(--panel); border: 1px solid var(--border);
+        border-radius: var(--radius); padding: 18px 20px;
+      }
+      .card h3 { margin: 0 0 6px; font-size: 16px; }
+      .card p { margin: 0; color: var(--muted); font-size: 14px; }
+      table { width: 100%; border-collapse: collapse; font-size: 14px; }
+      th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+      th { color: var(--muted); font-weight: 600; }
+      td code { white-space: nowrap; }
+      .who { color: var(--accent); font-size: 13px; white-space: nowrap; }
+      pre {
+        background: var(--panel-2); border: 1px solid var(--border); border-radius: var(--radius);
+        padding: 16px; overflow-x: auto; font-size: 13px; line-height: 1.5;
+      }
+      pre code { background: none; border: none; padding: 0; }
+      ul.plain { margin: 0; padding-left: 18px; color: var(--muted); font-size: 14px; }
+      ul.plain li { margin: 4px 0; }
+      footer { padding: 32px 0 56px; color: var(--muted); font-size: 13px; }
+      .note {
+        background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.3);
+        border-radius: 10px; padding: 12px 16px; color: var(--text); font-size: 13px; margin-top: 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="top">
+      <div class="wrap">
+        <div class="brand">
+          <div class="mark">B</div>
+          <div>
+            <div class="name">Benefits Case Management Backend</div>
+            <div class="badges">
+              <span class="badge play">Play 2 · Backend Modernization</span>
+              <span class="badge">Government</span>
+              <span class="badge">Built on Xano</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section style="border-bottom: 1px solid var(--border);">
+      <div class="wrap">
+        <h1>A legacy benefits case system, replaced by one governed API layer.</h1>
+        <p class="tagline">
+          Each application becomes a case that moves through an enforced lifecycle. Role checks gate
+          every step, one versioned rule decides each case, and every move is written to an audit
+          trail. The kind of logic a legacy monolith holds today, in a backend an evaluator can read.
+        </p>
+        <p class="meta"><strong>6 tables</strong> &middot; <strong>9 APIs</strong> &middot; <strong>1 shared rule function</strong> &middot; API-layer RBAC, never row-level security</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="https://github.com/xano-scratch/benefits-case-management-backend">View on GitHub</a>
+          <a class="btn ghost" href="#use">Use this template</a>
+        </div>
+        <div class="shot">
+          <img src="screenshot.png" alt="The case detail screen: a denied determination pinned to rule version income-eligibility-2025.09, the verification checklist, and the applicant summary, with the case queue on the left." />
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <h2>What it demonstrates</h2>
+        <div class="grid">
+          <div class="card">
+            <h3>A real state machine</h3>
+            <p>A case moves received, verifying, determination, closed, and a closed case can go to appeal and back. An illegal move (like received to closed) is refused at the API, and nothing is written.</p>
+          </div>
+          <div class="card">
+            <h3>API-layer RBAC</h3>
+            <p>A caseworker, a supervisor, and a viewer each get a different set of actions. The role check lives in each endpoint, reading the caller's own row. There is no row-level security.</p>
+          </div>
+          <div class="card">
+            <h3>One versioned rule</h3>
+            <p>A single shared function decides every case: all three checks verified, and income within the household limit. The determination is pinned to the rule version that produced it.</p>
+          </div>
+          <div class="card">
+            <h3>An audit trail</h3>
+            <p>Every change writes one append-only event: who acted, their role, the status it moved from and to, and why. The history of a case is whatever that table holds for it, in order.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <h2>API surface</h2>
+        <table>
+          <thead>
+            <tr><th>Endpoint</th><th>Who</th><th>What it enforces</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>POST /api:auth/login</code></td><td class="who">public</td><td>Verifies the password and mints a bearer token.</td></tr>
+            <tr><td><code>POST /api:cases/intake</code></td><td class="who">caseworker</td><td>Matches or creates an applicant, opens a case in received.</td></tr>
+            <tr><td><code>GET /api:cases/list</code></td><td class="who">any role</td><td>The queue, filterable by status and assignee.</td></tr>
+            <tr><td><code>GET /api:cases/get/{case_id}</code></td><td class="who">any role</td><td>One case with its checks, determination, and full history.</td></tr>
+            <tr><td><code>POST /api:cases/advance</code></td><td class="who">caseworker, supervisor</td><td>A legal transition only, else a clear error and no write.</td></tr>
+            <tr><td><code>POST /api:verifications/record</code></td><td class="who">caseworker</td><td>Records a check while the case is verifying.</td></tr>
+            <tr><td><code>POST /api:determinations/decide</code></td><td class="who">supervisor</td><td>Runs the shared rule and closes the case on the outcome.</td></tr>
+            <tr><td><code>POST /api:appeals/file</code></td><td class="who">caseworker, supervisor</td><td>Moves a denied, closed case back to appeal.</td></tr>
+            <tr><td><code>GET /api:seed/seed</code></td><td class="who">public</td><td>Resets and reseeds the sample data.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <h2>The frontend</h2>
+        <p class="tagline" style="font-size:16px;">
+          A React app that calls these endpoints and shows the governed result. It derives every path
+          and type from the backend defs, so the client cannot drift from the API.
+        </p>
+        <ul class="plain">
+          <li><strong>Sign in as any role.</strong> Switch between a caseworker, a supervisor, and a viewer. Each is a real authenticated session, and the actions available change with the role.</li>
+          <li><strong>Case queue.</strong> Every case, filterable by status, with the program and the assignee.</li>
+          <li><strong>Case detail.</strong> The determination with the rule version that fired, the verification checklist, the applicant, and the audit timeline.</li>
+          <li><strong>Governed actions.</strong> Advance, record a check, run a determination, file an appeal. A move your role may not make comes back as a clear error from the API.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="use">
+      <div class="wrap">
+        <h2>Use this template</h2>
+        <p class="tagline" style="font-size:16px;">
+          Clone it and deploy your own live copy in about a minute, or hand the prompt below to a
+          coding agent to start a new backend from this shape.
+        </p>
+        <pre><code>git clone https://github.com/xano-scratch/benefits-case-management-backend
+cd benefits-case-management-backend
+npm install
+npx xanots login
+npm run xano:deploy</code></pre>
+        <p class="meta" style="margin-top:18px;">Prompt for a coding agent:</p>
+        <pre><code>Start a new Xano backend from the XanoTS template at
+https://github.com/xano-scratch/benefits-case-management-backend.
+Clone it, run `npm install`, then `npx xanots login` and
+`npm run xano:deploy` to get a live environment. Author strictly against
+node_modules/@xanots/sdk/llms.txt. Keep the pattern this template proves:
+a role-gated state machine, one shared versioned rule, and an append-only
+audit trail, with API-layer RBAC and never row-level security. Adapt the
+tables, endpoints, and rule to my domain.</code></pre>
+        <div class="note">
+          The live demo links in the repo point to an ephemeral environment that expires. The durable
+          artifact is this repo. Deploy it yourself with the steps above for fresh links.
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="wrap">
+        Built with xanots, the TypeScript SDK for Xano. A demonstration backend, not a live production
+        reference. Sample data only.
+      </div>
+    </footer>
+  </body>
+</html>
